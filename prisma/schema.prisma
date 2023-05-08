@@ -1,0 +1,191 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator erd {
+  provider    = "prisma-erd-generator"
+  output      = "../diagram/erd.svg"
+  DISABLE_ERD = true
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                    String         @id @default(uuid())
+  name                  String         @db.VarChar(100)
+  email                 String         @unique @db.VarChar(150)
+  password              String
+  plan                  PLAN           @default(FREE)
+  vehicleFleet          VehicleFleet[]
+  driver                Driver[]
+  maxDriver             Int            @default(7)
+  maxVehicleFleet       Int            @default(1)
+  maxVehicle            Int            @default(7)
+  refreshToken          String?
+  refreshTokenExpiresAt DateTime?
+  createdAt             DateTime       @default(now())
+  updatedAt             DateTime       @updatedAt
+
+  @@map("account")
+}
+
+model VehicleFleet {
+  id                 String               @id @default(uuid())
+  name               String               @db.VarChar(100)
+  vehicle            Vehicle[]
+  vehicleFleetDriver VehicleFleetDriver[]
+  autoApproveWork    Boolean              @default(false)
+  autoApproveCost    Boolean              @default(false)
+  account            Account              @relation(fields: [accountId], references: [id])
+  accountId          String
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+
+  @@map("vehicleFleet")
+}
+
+model Driver {
+  id                    String               @id @default(uuid())
+  name                  String               @db.VarChar(100)
+  email                 String               @db.VarChar(150)
+  password              String
+  isDisable             Boolean              @default(false)
+  vehicleFleetDriver    VehicleFleetDriver[]
+  vehicleDriver         VehicleDriver[]
+  work                  Work[]
+  cost                  Cost[]
+  account               Account              @relation(fields: [accountId], references: [id])
+  accountId             String
+  refreshToken          String?
+  refreshTokenExpiresAt DateTime?
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @updatedAt
+
+  @@map("driver")
+}
+
+model VehicleFleetDriver {
+  id             String        @id @default(uuid())
+  vehicleFleet   VehicleFleet? @relation(fields: [vehicleFleetId], references: [id])
+  vehicleFleetId String?
+  driver         Driver?       @relation(fields: [driverId], references: [id])
+  driverId       String?
+
+  @@map("vehicleFleetDriver")
+}
+
+model Vehicle {
+  id              String          @id @default(uuid())
+  name            String          @db.VarChar(100)
+  licensePlate    String          @db.VarChar(12)
+  type            String
+  image           String?
+  work            Work[]
+  costByYear      CostByYear[]
+  vehicleDriver   VehicleDriver[]
+  autoApproveWork Boolean         @default(false)
+  autoApproveCost Boolean         @default(false)
+  vehicleFleet    VehicleFleet    @relation(fields: [vehicleFleetId], references: [id])
+  vehicleFleetId  String
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@map("vehicle")
+}
+
+model VehicleDriver {
+  id        String  @id @default(uuid())
+  driver    Driver  @relation(fields: [driverId], references: [id])
+  driverId  String
+  vehicle   Vehicle @relation(fields: [vehicleId], references: [id])
+  vehicleId String
+
+  @@map("vehicleDriver")
+}
+
+model Work {
+  id        String   @id @default(uuid())
+  match     String
+  destiny   String
+  distance  Float
+  driver    Driver?  @relation(fields: [driverId], references: [id])
+  driverId  String?
+  status    STATUS   @default(PENDING)
+  vehicle   Vehicle  @relation(fields: [vehicleId], references: [id])
+  vehicleId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("work")
+}
+
+model CostByYear {
+  id          String        @id @default(uuid())
+  year        String        @db.VarChar(4)
+  vehicle     Vehicle       @relation(fields: [vehicleId], references: [id])
+  vehicleId   String
+  costByMonth CostByMonth[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@map("costByYear")
+}
+
+model CostByMonth {
+  id           String     @id @default(uuid())
+  month        MONTH
+  cost         Cost[]
+  costByYear   CostByYear @relation(fields: [costByYearId], references: [id])
+  costByYearId String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@map("costByMonth")
+}
+
+model Cost {
+  id            String      @id @default(uuid())
+  name          String      @db.VarChar(100)
+  value         Float
+  decription    String?
+  image         String?
+  driver        Driver?     @relation(fields: [driverId], references: [id])
+  driverId      String?
+  status        STATUS      @default(PENDING)
+  costByMonth   CostByMonth @relation(fields: [costByMonthId], references: [id])
+  costByMonthId String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@map("cost")
+}
+
+enum STATUS {
+  PENDING
+  APPROVED
+}
+
+enum PLAN {
+  FREE
+  BASIC
+  ADVANCED
+  CUSTOM
+}
+
+enum MONTH {
+  JANUARY
+  FEBRUARY
+  MARCH
+  APRIL
+  MAY
+  JUNE
+  JULY
+  AUGUST
+  SEPTEMBER
+  OCTOBER
+  NOVEMBER
+  DECEMBER
+}
