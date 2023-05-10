@@ -1,20 +1,27 @@
 import { DataSource } from '@infra/database';
 import { ValidationError } from 'yup';
-import { badRequest, errorLogger, ok, validationErrorResponse } from '@main/utils';
+import { accountIsOwnerOfDriver } from '@application/helpers';
+import { badRequest, errorLogger, ok, unauthorized, validationErrorResponse } from '@main/utils';
+import { deleteSchema } from '@data/validation';
 import { messages } from '@domain/helpers';
 import type { Controller } from '@application/protocols';
 import type { Request, Response } from 'express';
 
-export const deleteAccountController: Controller =
+export const disableDriverController: Controller =
   () => async (request: Request, response: Response) => {
     try {
-      await DataSource.account.delete({
-        select: {
-          email: true,
-          name: true
+      await deleteSchema.validate(request, { abortEarly: false });
+      const { id } = request.params;
+
+      if (!(await accountIsOwnerOfDriver(id, request.account.id)))
+        return unauthorized({ response });
+
+      await DataSource.driver.update({
+        data: {
+          isDisable: true
         },
         where: {
-          id: request.account.id
+          id
         }
       });
 

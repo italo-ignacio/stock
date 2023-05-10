@@ -1,11 +1,14 @@
 /* eslint-disable no-ternary */
 import { DataSource } from '@infra/database';
 import { badRequest, errorLogger, ok } from '@main/utils';
+import { pagination } from '@application/helpers';
 import type { Controller } from '@application/protocols';
 import type { Request, Response } from 'express';
 
 export const findVehicleController: Controller =
   () => async (request: Request, response: Response) => {
+    const { skip, take } = pagination(request);
+
     const searchParams =
       request.account.role === 'driver'
         ? {
@@ -31,6 +34,8 @@ export const findVehicleController: Controller =
           type: true,
           work: true
         },
+        skip,
+        take,
         where: { ...searchParams }
       });
 

@@ -68,11 +68,11 @@ model Driver {
 }
 
 model VehicleFleetDriver {
-  id             String        @id @default(uuid())
-  vehicleFleet   VehicleFleet? @relation(fields: [vehicleFleetId], references: [id])
-  vehicleFleetId String?
-  driver         Driver?       @relation(fields: [driverId], references: [id])
-  driverId       String?
+  id             String       @id @default(uuid())
+  vehicleFleet   VehicleFleet @relation(fields: [vehicleFleetId], references: [id])
+  vehicleFleetId String
+  driver         Driver       @relation(fields: [driverId], references: [id])
+  driverId       String
 
   @@map("vehicleFleetDriver")
 }
@@ -150,10 +150,10 @@ model Cost {
   id            String      @id @default(uuid())
   name          String      @db.VarChar(100)
   value         Float
-  decription    String?
+  description   String?     @db.Text
   image         String?
-  driver        Driver?     @relation(fields: [driverId], references: [id])
-  driverId      String?
+  driver        Driver      @relation(fields: [driverId], references: [id])
+  driverId      String
   status        STATUS      @default(PENDING)
   costByMonth   CostByMonth @relation(fields: [costByMonthId], references: [id])
   costByMonthId String

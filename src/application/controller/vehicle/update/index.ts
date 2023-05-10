@@ -19,7 +19,7 @@ interface Body {
   driverList?: string[];
 }
 
-export const updateVehicleFleetController: Controller =
+export const updateVehicleController: Controller =
   () => async (request: Request, response: Response) => {
     try {
       await updateVehicleSchema.validate(request, { abortEarly: false });

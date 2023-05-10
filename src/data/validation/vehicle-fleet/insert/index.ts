@@ -9,11 +9,5 @@ export const insertVehicleFleetSchema = yup.object().shape({
       english: 'name',
       portuguese: 'nome'
     })
-  }),
-  params: yup.object().shape({
-    id: stringRequired({
-      english: 'id',
-      portuguese: 'id'
-    })
   })
 });

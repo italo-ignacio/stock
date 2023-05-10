@@ -30,8 +30,8 @@ export const insertVehicleSchema = yup.object().shape({
       portuguese: 'tipo'
     }),
     vehicleFleetId: stringRequired({
-      english: 'vehicle control',
-      portuguese: 'controle de veíuclo'
+      english: 'vehicle fleet',
+      portuguese: 'frota de veíuclo'
     })
   })
 });

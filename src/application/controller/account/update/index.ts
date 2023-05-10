@@ -7,7 +7,7 @@ import type { Controller } from '@application/protocols';
 import type { Request, Response } from 'express';
 
 interface Body {
-  name: string;
+  name?: string;
   email?: string;
 }
 

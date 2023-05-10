@@ -51,13 +51,8 @@ export const numberRequired = (field: messageTypeResponse): NumberSchema =>
     .typeError(JSON.stringify(messages.yup.numberSchema(field)))
     .required(JSON.stringify(messages.yup.requiredSchema(field)));
 
-export const numberNotRequired = (
-  field: messageTypeResponse
-): NumberSchema<Maybe<number | undefined>> =>
-  yup
-    .number()
-    .typeError(JSON.stringify(messages.yup.numberSchema(field)))
-    .notRequired();
+export const numberNotRequired = (): NumberSchema<Maybe<number | undefined>> =>
+  yup.number().notRequired();
 
 export const dateRequired = (field: messageTypeResponse): DateSchema =>
   yup

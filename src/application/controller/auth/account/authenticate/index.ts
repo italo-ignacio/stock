@@ -34,7 +34,7 @@ export const authenticateAccountController: Controller =
       });
 
       if (account === null)
-        return unauthorized({
+        return badRequest({
           message: messages.auth.notFound,
           response
         });
@@ -43,7 +43,6 @@ export const authenticateAccountController: Controller =
 
       if (!passwordIsCorrect)
         return unauthorized({
-          message: messages.auth.notFound,
           response
         });
 

@@ -4,7 +4,7 @@ import {
   findOneVehicleController,
   findVehicleController,
   insertVehicleController,
-  updateVehicleFleetController
+  updateVehicleController
 } from '@application/controller/vehicle';
 
 export default (inputRouter: Router): void => {
@@ -14,7 +14,7 @@ export default (inputRouter: Router): void => {
   router.get('', findVehicleController());
   router.get('/:id', findOneVehicleController());
   router.delete('/:id', deleteVehicleController());
-  router.put('/:id', updateVehicleFleetController());
+  router.put('/:id', updateVehicleController());
 
   inputRouter.use('/vehicle', router);
 };
