@@ -8,6 +8,7 @@ export const insertCostSchema = yup.object().shape({
       portuguese: 'id'
     }),
     description: stringNotRequired(),
+    driverId: stringNotRequired(),
     image: stringNotRequired(),
     name: stringRequired({
       english: 'name',

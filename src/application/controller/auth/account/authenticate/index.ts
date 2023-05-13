@@ -2,14 +2,7 @@ import { DataSource } from '@infra/database';
 import { ValidationError } from 'yup';
 import { add } from 'date-fns';
 import { authenticateSchema } from '@data/validation';
-import {
-  badRequest,
-  errorLogger,
-  generateToken,
-  ok,
-  unauthorized,
-  validationErrorResponse
-} from '@main/utils';
+import { badRequest, errorLogger, generateToken, ok, validationErrorResponse } from '@main/utils';
 import { compare } from 'bcrypt';
 import { env } from '@main/config';
 import { messages } from '@domain/helpers';
@@ -42,7 +35,8 @@ export const authenticateAccountController: Controller =
       const passwordIsCorrect = await compare(password, account.password);
 
       if (!passwordIsCorrect)
-        return unauthorized({
+        return badRequest({
+          message: messages.auth.notFound,
           response
         });
 

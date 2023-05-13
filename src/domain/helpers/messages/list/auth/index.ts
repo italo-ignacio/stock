@@ -1,6 +1,6 @@
 export const authMessages = {
   notFound: {
-    english: 'Invalid data',
-    portuguese: 'Dados inválido'
+    english: 'User not found',
+    portuguese: 'Usuário não encontrado'
   }
 };

@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only --clear -r dotenv/config --inspect=0.0.0.0:9229 src/main/server.ts",
+    "dev": "ts-node-dev --respawn --transpile-only --clear -r dotenv/config --inspect=0.0.0.0:9229 src/main/server.ts --host",
     "install:clean:windows": "rmdir node_modules & del package-lock.json & del yarn.lock & yarn install"
   },
   "dependencies": {

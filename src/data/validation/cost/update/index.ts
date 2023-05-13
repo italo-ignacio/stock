@@ -7,6 +7,7 @@ export const updateCostSchema = yup.object().shape({
     description: stringNotRequired(),
     image: stringNotRequired(),
     name: stringNotRequired(),
+    status: stringNotRequired(),
     value: numberNotRequired()
   }),
   params: yup.object().shape({

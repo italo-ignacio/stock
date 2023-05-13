@@ -2,7 +2,7 @@
 /* eslint-disable no-ternary */
 import { DataSource } from '@infra/database';
 import { ValidationError } from 'yup';
-import { accountCanCreateCost } from '@application/helpers';
+import { accountCanCreateCost, costIsPending } from '@application/helpers';
 import { badRequest, errorLogger, ok, unauthorized, validationErrorResponse } from '@main/utils';
 import { insertCostSchema } from '@data/validation';
 import type { Controller } from '@application/protocols';
@@ -14,6 +14,7 @@ interface Body {
   value: number;
   description?: string;
   image?: string;
+  driverId?: string;
 }
 
 export const insertCostController: Controller =
@@ -21,34 +22,22 @@ export const insertCostController: Controller =
     try {
       await insertCostSchema.validate(request, { abortEarly: false });
 
-      const { costByMonthId, name, value, description, image } = request.body as Body;
+      const { costByMonthId, name, value, description, image, driverId } = request.body as Body;
 
       if (!(await accountCanCreateCost(costByMonthId, request.account.id)))
         return unauthorized({ response });
 
-      const search = await DataSource.cost.create({
+      const status = (await costIsPending(costByMonthId)) ? 'PENDING' : 'APPROVED';
+
+      await DataSource.cost.create({
         data: {
           costByMonthId,
           description,
+          driverId: driverId ?? request.account.id,
           image,
           name,
+          status,
           value
-        }
-      });
-
-      if (search !== null)
-        return badRequest({
-          message: {
-            english: 'this year already exists',
-            portuguese: 'esse ano já existe'
-          },
-          response
-        });
-
-      await DataSource.costByYear.create({
-        data: {
-          vehicleId,
-          year
         }
       });
 
