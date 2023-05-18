@@ -111,6 +111,8 @@ model Work {
   match     String
   destiny   String
   distance  Float
+  profit    Float
+  extra     Float?
   driver    Driver?  @relation(fields: [driverId], references: [id])
   driverId  String?
   status    STATUS   @default(PENDING)

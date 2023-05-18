@@ -28,7 +28,7 @@ export const pagination = (
     skipValue = Number(page) * takeValue - takeValue;
 
   return {
-    skip: skipValue,
-    take: takeValue
+    skip: Number(skipValue),
+    take: Number(takeValue)
   };
 };

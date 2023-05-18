@@ -11,7 +11,6 @@ export const findVehicleFleetController: Controller =
     try {
       const search = await DataSource.vehicleFleet.findMany({
         select: {
-          accountId: true,
           id: true,
           name: true,
           vehicle: true
