@@ -8,7 +8,6 @@ import type { Request, Response } from 'express';
 interface Body {
   name: string;
   autoApproveCost?: boolean;
-  autoApproveWork?: boolean;
 }
 
 export const insertVehicleFleetController: Controller =
@@ -16,13 +15,12 @@ export const insertVehicleFleetController: Controller =
     try {
       await insertVehicleFleetSchema.validate(request, { abortEarly: false });
 
-      const { name, autoApproveCost, autoApproveWork } = request.body as Body;
+      const { name, autoApproveCost } = request.body as Body;
 
       await DataSource.vehicleFleet.create({
         data: {
           accountId: request.account.id,
           autoApproveCost,
-          autoApproveWork,
           name
         }
       });
