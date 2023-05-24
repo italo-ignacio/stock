@@ -2,7 +2,7 @@ import type { messageTypeResponse } from '@domain/errors';
 
 export const yupMessages = {
   dateSchema: (value: messageTypeResponse): messageTypeResponse => ({
-    english: `The field ${value.english} is required`,
+    english: `The field ${value.english} must be a date`,
     portuguese: `O campo ${value.portuguese} deve ser uma data`
   }),
 
@@ -12,7 +12,7 @@ export const yupMessages = {
   },
 
   numberSchema: (value: messageTypeResponse): messageTypeResponse => ({
-    english: `The field ${value.english} is required`,
+    english: `The field ${value.english} must be a number`,
     portuguese: `O campo ${value.portuguese} deve ser uma número`
   }),
 

@@ -1,6 +1,6 @@
 export const accountMessages = {
   emailAlreadyExists: {
     english: 'Email already exists',
-    portuguese: 'E-mal já existe'
+    portuguese: 'E-mail já existe'
   }
 };

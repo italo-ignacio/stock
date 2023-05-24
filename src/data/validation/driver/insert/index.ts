@@ -11,10 +11,6 @@ export const insertDriverSchema = yup.object().shape({
       english: 'name',
       portuguese: 'nome'
     }),
-    password: stringRequired({
-      english: 'password',
-      portuguese: 'senha'
-    }),
     vehicleFleetList: arrayNotRequired(
       stringRequired({
         english: 'id',

@@ -4,8 +4,6 @@ import { DataSource } from '@infra/database';
 import { ValidationError } from 'yup';
 import { arrayExists } from '@application/helpers';
 import { badRequest, errorLogger, ok, validationErrorResponse } from '@main/utils';
-import { env } from '@main/config';
-import { hash } from 'bcrypt';
 import { insertDriverSchema } from '@data/validation';
 import { messages } from '@domain/helpers';
 import type { Controller } from '@application/protocols';
@@ -14,7 +12,6 @@ import type { Request, Response } from 'express';
 interface Body {
   name: string;
   email: string;
-  password: string;
   vehicleFleetList?: string[];
 }
 
@@ -23,7 +20,7 @@ export const insertDriverController: Controller =
     try {
       await insertDriverSchema.validate(request, { abortEarly: false });
 
-      const { name, email, password, vehicleFleetList } = request.body as Body;
+      const { name, email, vehicleFleetList } = request.body as Body;
 
       const hasDriver = await DataSource.driver.findFirst({
         where: {
@@ -36,10 +33,6 @@ export const insertDriverController: Controller =
 
       if (hasDriver !== null)
         return badRequest({ message: messages.account.emailAlreadyExists, response });
-
-      const { hashSalt } = env;
-
-      const hashedPassword = await hash(password, hashSalt);
 
       const vehicleFleetDriver = arrayExists(vehicleFleetList)
         ? {
@@ -58,7 +51,7 @@ export const insertDriverController: Controller =
           accountId: request.account.id,
           email,
           name,
-          password: hashedPassword,
+          password: 'password',
           vehicleFleetDriver
         }
       });

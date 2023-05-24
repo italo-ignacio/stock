@@ -33,7 +33,7 @@ export const validateTokenMiddleware: Controller =
 
       if (account === null) return unauthorized({ response });
 
-      Object.assign(request, { account: { email, id, name } });
+      Object.assign(request, { account: { email, id, name, role: 'account' } });
 
       next();
     } catch (error) {

@@ -19,7 +19,10 @@ export const findDriverController: Controller =
         skip,
         take,
         where: {
-          accountId: request.account.id
+          AND: {
+            accountId: request.account.id,
+            isDisable: false
+          }
         }
       });
 
