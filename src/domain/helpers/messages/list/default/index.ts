@@ -21,6 +21,10 @@ export const defaultMessages = {
     english: 'Unauthenticated user',
     portuguese: 'Usuário não autenticado'
   },
+  uploadError: {
+    english: 'Error during file upload',
+    portuguese: 'Erro durante o upload do arquivo'
+  },
   validationErrorResponse: {
     english: 'Failed during form validation',
     portuguese: 'Falha durante validação do formulário'

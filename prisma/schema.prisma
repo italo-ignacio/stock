@@ -80,7 +80,7 @@ model VehicleFleetDriver {
 model Vehicle {
   id              String          @id @default(uuid())
   name            String          @db.VarChar(100)
-  licensePlate    String          @db.VarChar(12)
+  licensePlate    String          @db.VarChar(100)
   type            String
   image           String?
   work            Work[]

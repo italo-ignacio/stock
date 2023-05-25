@@ -7,6 +7,6 @@ export const env = {
   jwtSecret: process.env.JWT_SECRET ?? '',
   refreshTokenExpires: Number(process.env.REFRESH_EXPIRATION),
   staticPaths: {
-    images: process.env.IMAGES_LINK
+    images: process.env.IMAGES_LINK ?? ''
   }
 };
