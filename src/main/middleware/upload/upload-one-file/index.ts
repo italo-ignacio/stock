@@ -3,14 +3,19 @@ import { badRequest } from '@main/utils';
 import { env } from '@main/config';
 import { messages } from '@domain/helpers';
 import multer, { MulterError, diskStorage } from 'multer';
+import path from 'path';
 import type { NextFunction, Request, Response } from 'express';
 
 const storage = diskStorage({
   destination(req, file, cb) {
-    cb(null, `./static/uploads/${env.staticPaths.images}`);
+    cb(null, `./src/static/uploads/${env.staticPaths.images}`);
   },
   filename(req, file, cb) {
-    cb(null, `${Date.now()}-${file.originalname}`);
+    const extension = path.extname(file.originalname);
+    const allowedExtensions = ['.jpeg', '.png', '.webp', '.avif'];
+
+    if (allowedExtensions.includes(extension)) cb(null, `${Date.now()}-${file.originalname}`);
+    else cb(new Error(''), '');
   }
 });
 
@@ -31,6 +36,6 @@ export const handleMulterError = (
 ) => {
   if (err instanceof MulterError)
     return badRequest({ message: messages.default.uploadError, response });
-
+  if (err instanceof Error) return badRequest({ message: messages.default.badFile, response });
   next();
 };

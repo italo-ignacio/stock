@@ -5,17 +5,14 @@ import {
   findOneVehicleController,
   findVehicleController,
   insertVehicleController,
-  insertVehicleImageController,
   updateVehicleController
 } from '@application/controller/vehicle';
-import { handleMulterError, uploadOneFileMiddleware } from '@main/middleware/upload';
 
 export default (inputRouter: Router): void => {
   const router = Router();
 
   router.post('', insertVehicleController());
   router.get('', findVehicleController());
-  router.put('/image', uploadOneFileMiddleware, handleMulterError, insertVehicleImageController());
   router.get('/:id', findOneVehicleController());
   router.delete('/:id', deleteVehicleController());
   router.put('/:id', updateVehicleController());

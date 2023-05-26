@@ -3,4 +3,3 @@ export * from './find';
 export * from './delete';
 export * from './update';
 export * from './find-one';
-export * from './insert-image';

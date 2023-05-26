@@ -1,6 +1,6 @@
 import { DataSource } from '@infra/database';
 import { ValidationError } from 'yup';
-import { accountIsOwnerOfVehicle } from '@application/helpers';
+import { accountIsOwnerOfVehicle, removeImage } from '@application/helpers';
 import { badRequest, errorLogger, ok, unauthorized, validationErrorResponse } from '@main/utils';
 import { deleteSchema } from '@data/validation';
 import type { Controller } from '@application/protocols';
@@ -16,9 +16,14 @@ export const deleteVehicleController: Controller =
       if (!(await accountIsOwnerOfVehicle(id, request.account.id)))
         return unauthorized({ response });
 
-      await DataSource.vehicle.delete({
+      const { image } = await DataSource.vehicle.delete({
+        select: {
+          image: true
+        },
         where: { id }
       });
+
+      if (image !== null) removeImage(image);
 
       return ok({ response });
     } catch (error) {

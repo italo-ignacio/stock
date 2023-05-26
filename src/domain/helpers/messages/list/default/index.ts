@@ -1,6 +1,10 @@
 import type { messageTypeResponse } from '@domain/errors';
 
 export const defaultMessages = {
+  badFile: {
+    english: 'Unsupported file',
+    portuguese: 'Arquivo não suportado'
+  },
   badRequest: {
     english: 'Request failed',
     portuguese: 'Falha na requisição'

@@ -3,7 +3,7 @@
 /* eslint-disable no-ternary */
 import { DataSource } from '@infra/database';
 import { ValidationError } from 'yup';
-import { accountIsOwnerOfVehicle, driverIsOwnerOfVehicle } from '@application/helpers';
+import { accountIsOwnerOfVehicle, driverIsOwnerOfVehicle, removeImage } from '@application/helpers';
 import { badRequest, errorLogger, ok, unauthorized, validationErrorResponse } from '@main/utils';
 import { updateVehicleSchema } from '@data/validation';
 import type { Controller } from '@application/protocols';
@@ -52,6 +52,21 @@ export const updateVehicleController: Controller =
       const data = isDriver
         ? { image, licensePlate, name, type }
         : { autoApproveCost, autoApproveWork, image, licensePlate, name, type, vehicleDriver };
+
+      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+      if (image) {
+        const vehicleSearch = await DataSource.vehicle.findUnique({
+          select: {
+            image: true
+          },
+          where: {
+            id
+          }
+        });
+
+        if (vehicleSearch?.image !== null && vehicleSearch !== null)
+          removeImage(vehicleSearch.image);
+      }
 
       await DataSource.vehicle.update({
         data,
