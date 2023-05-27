@@ -30,6 +30,11 @@ export const authenticateDriverController: Controller =
       const { email, password } = request.body as Body;
 
       const driver = await DataSource.driver.findFirst({
+        select: {
+          email: true,
+          id: true,
+          password: true
+        },
         where: {
           AND: {
             email,
@@ -55,7 +60,6 @@ export const authenticateDriverController: Controller =
       const { accessToken } = generateToken({
         email: driver.email,
         id: driver.id,
-        name: driver.name,
         role: 'driver'
       });
 
@@ -67,6 +71,9 @@ export const authenticateDriverController: Controller =
         data: {
           refreshToken,
           refreshTokenExpiresAt
+        },
+        select: {
+          id: true
         },
         where: {
           id: driver.id

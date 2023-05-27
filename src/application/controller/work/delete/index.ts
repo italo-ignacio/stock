@@ -16,6 +16,9 @@ export const deleteWorkController: Controller =
       if (!(await accountIsOwnerOfWork(id, request.account.id))) return unauthorized({ response });
 
       await DataSource.work.delete({
+        select: {
+          id: true
+        },
         where: { id }
       });
 

@@ -26,6 +26,10 @@ export const refreshTokenController: Controller =
       const { refreshToken } = request.body as Body;
 
       const account = await DataSource.account.findFirst({
+        select: {
+          email: true,
+          id: true
+        },
         where: {
           refreshToken
         }
@@ -35,7 +39,6 @@ export const refreshTokenController: Controller =
         const { accessToken } = generateToken({
           email: account.email,
           id: account.id,
-          name: account.name,
           role: 'account'
         });
 
@@ -43,6 +46,10 @@ export const refreshTokenController: Controller =
       }
 
       const driver = await DataSource.driver.findFirst({
+        select: {
+          email: true,
+          id: true
+        },
         where: {
           refreshToken
         }
@@ -52,7 +59,6 @@ export const refreshTokenController: Controller =
         const { accessToken } = generateToken({
           email: driver.email,
           id: driver.id,
-          name: driver.name,
           role: 'driver'
         });
 

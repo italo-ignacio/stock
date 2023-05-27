@@ -19,9 +19,9 @@ export const validateTokenMiddleware: Controller =
       if (accessToken === null) return unauthorized({ response });
 
       const { jwtSecret } = env;
-      const { id, name, email } = verify(accessToken, jwtSecret) as tokenInput;
+      const { id, email, role } = verify(accessToken, jwtSecret) as tokenInput;
 
-      if (typeof id === 'undefined' || typeof email === 'undefined' || typeof name === 'undefined')
+      if (typeof id === 'undefined' || typeof email === 'undefined' || typeof role === 'undefined')
         return unauthorized({ response });
 
       const account = await DataSource.account.findFirst({
@@ -33,7 +33,7 @@ export const validateTokenMiddleware: Controller =
 
       if (account === null) return unauthorized({ response });
 
-      Object.assign(request, { account: { email, id, name, role: 'account' } });
+      Object.assign(request, { account: { email, id, role } });
       next();
     } catch (error) {
       errorLogger(error);

@@ -4,8 +4,8 @@ import { yup } from '@infra/yup';
 export const insertWorkSchema = yup.object().shape({
   body: yup.object().shape({
     destiny: stringRequired({
-      english: 'license plate',
-      portuguese: 'placa do veículo'
+      english: 'destiny',
+      portuguese: 'destino'
     }),
     distance: numberRequired({
       english: 'distance',
@@ -13,8 +13,12 @@ export const insertWorkSchema = yup.object().shape({
     }),
     driverId: stringNotRequired(),
     match: stringRequired({
-      english: 'license plate',
-      portuguese: 'placa do veículo'
+      english: 'match',
+      portuguese: 'local de saída'
+    }),
+    profit: numberRequired({
+      english: 'profit',
+      portuguese: 'lucro'
     }),
     vehicleId: stringRequired({
       english: 'id',

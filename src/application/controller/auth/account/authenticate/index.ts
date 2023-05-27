@@ -23,6 +23,11 @@ export const authenticateAccountController: Controller =
       const { email, password } = request.body as Body;
 
       const account = await DataSource.account.findUnique({
+        select: {
+          email: true,
+          id: true,
+          password: true
+        },
         where: { email }
       });
 
@@ -43,7 +48,6 @@ export const authenticateAccountController: Controller =
       const { accessToken } = generateToken({
         email: account.email,
         id: account.id,
-        name: account.name,
         role: 'account'
       });
 
@@ -55,6 +59,9 @@ export const authenticateAccountController: Controller =
         data: {
           refreshToken,
           refreshTokenExpiresAt
+        },
+        select: {
+          id: true
         },
         where: {
           id: account.id

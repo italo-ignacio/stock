@@ -50,6 +50,9 @@ export const insertVehicleController: Controller =
           type,
           vehicleDriver,
           vehicleFleetId
+        },
+        select: {
+          id: true
         }
       });
 

@@ -17,6 +17,9 @@ export const deleteVehicleFleetController: Controller =
         return unauthorized({ response });
 
       await DataSource.vehicleFleet.delete({
+        select: {
+          id: true
+        },
         where: { id }
       });
 

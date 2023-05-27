@@ -9,7 +9,6 @@ import type { Request, Response } from 'express';
 interface Body {
   name?: string;
   autoApproveCost?: boolean;
-  autoApproveWork?: boolean;
 }
 
 export const updateVehicleFleetController: Controller =
@@ -22,10 +21,13 @@ export const updateVehicleFleetController: Controller =
       if (!(await accountIsOwnerOfVehicleFleet(id, request.account.id)))
         return unauthorized({ response });
 
-      const { name, autoApproveCost, autoApproveWork } = request.body as Body;
+      const { name, autoApproveCost } = request.body as Body;
 
       await DataSource.vehicleFleet.update({
-        data: { autoApproveCost, autoApproveWork, name },
+        data: { autoApproveCost, name },
+        select: {
+          id: true
+        },
         where: {
           id: request.params.id
         }

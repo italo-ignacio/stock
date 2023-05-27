@@ -23,6 +23,9 @@ export const insertDriverController: Controller =
       const { name, email, vehicleFleetList } = request.body as Body;
 
       const hasDriver = await DataSource.driver.findFirst({
+        select: {
+          id: true
+        },
         where: {
           AND: {
             email,
@@ -53,6 +56,9 @@ export const insertDriverController: Controller =
           name,
           password: 'password',
           vehicleFleetDriver
+        },
+        select: {
+          id: true
         }
       });
 

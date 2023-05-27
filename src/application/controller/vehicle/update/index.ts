@@ -65,11 +65,18 @@ export const updateVehicleController: Controller =
         });
 
         if (vehicleSearch?.image !== null && vehicleSearch !== null)
-          removeImage(vehicleSearch.image);
+          try {
+            removeImage(vehicleSearch.image);
+          } catch (error) {
+            errorLogger(error);
+          }
       }
 
       await DataSource.vehicle.update({
         data,
+        select: {
+          id: true
+        },
         where: {
           id
         }

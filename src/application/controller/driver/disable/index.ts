@@ -20,6 +20,9 @@ export const disableDriverController: Controller =
         data: {
           isDisable: true
         },
+        select: {
+          id: true
+        },
         where: {
           id
         }

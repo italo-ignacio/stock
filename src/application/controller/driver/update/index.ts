@@ -27,6 +27,9 @@ export const updateDriverController: Controller =
 
       if (typeof email !== 'undefined') {
         const hasAccount = await DataSource.account.findUnique({
+          select: {
+            id: true
+          },
           where: {
             email
           }
@@ -38,6 +41,9 @@ export const updateDriverController: Controller =
 
       await DataSource.account.update({
         data: { email, name },
+        select: {
+          id: true
+        },
         where: {
           id
         }

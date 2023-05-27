@@ -27,7 +27,7 @@ export const findOneVehicleController: Controller =
     try {
       const search = await DataSource.vehicle.findFirst({
         select: {
-          costByYear: true,
+          cost: true,
           id: true,
           image: true,
           name: true,

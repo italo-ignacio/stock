@@ -22,6 +22,9 @@ export const insertAccountController: Controller =
       const { name, email, password } = request.body as Body;
 
       const hasAccount = await DataSource.account.findUnique({
+        select: {
+          id: true
+        },
         where: {
           email
         }
@@ -35,7 +38,10 @@ export const insertAccountController: Controller =
       const hashedPassword = await hash(password, hashSalt);
 
       await DataSource.account.create({
-        data: { email, name, password: hashedPassword }
+        data: { email, name, password: hashedPassword },
+        select: {
+          id: true
+        }
       });
 
       return ok({ response });

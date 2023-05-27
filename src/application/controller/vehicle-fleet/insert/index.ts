@@ -22,6 +22,9 @@ export const insertVehicleFleetController: Controller =
           accountId: request.account.id,
           autoApproveCost,
           name
+        },
+        select: {
+          id: true
         }
       });
 

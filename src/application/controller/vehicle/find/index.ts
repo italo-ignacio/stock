@@ -27,12 +27,10 @@ export const findVehicleController: Controller =
     try {
       const search = await DataSource.vehicle.findMany({
         select: {
-          costByYear: true,
           id: true,
           image: true,
           name: true,
-          type: true,
-          work: true
+          type: true
         },
         skip,
         take,

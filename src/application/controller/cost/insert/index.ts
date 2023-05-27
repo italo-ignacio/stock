@@ -15,6 +15,7 @@ interface Body {
   description?: string;
   image?: string;
   driverId?: string;
+  vehicleId: string;
 }
 
 export const insertCostController: Controller =
@@ -22,7 +23,8 @@ export const insertCostController: Controller =
     try {
       await insertCostSchema.validate(request, { abortEarly: false });
 
-      const { costByMonthId, name, value, description, image, driverId } = request.body as Body;
+      const { costByMonthId, name, value, description, image, driverId, vehicleId } =
+        request.body as Body;
 
       if (!(await accountCanCreateCost(costByMonthId, request.account.id)))
         return unauthorized({ response });
@@ -31,13 +33,13 @@ export const insertCostController: Controller =
 
       await DataSource.cost.create({
         data: {
-          costByMonthId,
           description,
           driverId: driverId ?? request.account.id,
           image,
           name,
           status,
-          value
+          value,
+          vehicleId
         }
       });
 

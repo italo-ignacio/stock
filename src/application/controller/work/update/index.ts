@@ -34,6 +34,9 @@ export const updateWorkController: Controller =
           driverId: driverId ?? request.account.id,
           match
         },
+        select: {
+          id: true
+        },
         where: {
           id
         }

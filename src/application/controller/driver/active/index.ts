@@ -17,6 +17,9 @@ export const activeDriverController: Controller =
         return unauthorized({ response });
 
       const search = await DataSource.driver.findFirst({
+        select: {
+          id: true
+        },
         where: {
           id,
           isDisable: false
@@ -35,6 +38,9 @@ export const activeDriverController: Controller =
       await DataSource.driver.update({
         data: {
           isDisable: false
+        },
+        select: {
+          id: true
         },
         where: {
           id

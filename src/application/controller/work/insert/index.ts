@@ -11,6 +11,7 @@ import type { Request, Response } from 'express';
 interface Body {
   destiny: string;
   distance: number;
+  profit: number;
   match: string;
   vehicleId: string;
   driverId?: string;
@@ -21,7 +22,7 @@ export const insertWorkController: Controller =
     try {
       await insertWorkSchema.validate(request, { abortEarly: false });
 
-      const { destiny, distance, match, vehicleId, driverId } = request.body as Body;
+      const { destiny, distance, match, vehicleId, driverId, profit } = request.body as Body;
 
       if (!(await accountCanCreateWork(vehicleId, request.account.id)))
         return unauthorized({ response });
@@ -32,7 +33,11 @@ export const insertWorkController: Controller =
           distance,
           driverId: driverId ?? request.account.id,
           match,
+          profit,
           vehicleId
+        },
+        select: {
+          id: true
         }
       });
 

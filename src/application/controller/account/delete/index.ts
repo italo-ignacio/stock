@@ -10,8 +10,7 @@ export const deleteAccountController: Controller =
     try {
       await DataSource.account.delete({
         select: {
-          email: true,
-          name: true
+          id: true
         },
         where: {
           id: request.account.id

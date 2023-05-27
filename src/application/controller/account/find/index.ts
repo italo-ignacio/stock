@@ -11,8 +11,7 @@ export const findAccountController: Controller =
           email: true,
           id: true,
           name: true,
-          plan: true,
-          vehicleFleet: true
+          plan: true
         },
         where: {
           id: request.account.id
