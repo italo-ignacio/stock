@@ -1,28 +1,24 @@
 import { DataSource } from '@infra/database';
 
 export const accountCanCreateCost = async (
-  costByMonthId: string,
+  vehicleId: string,
   accountId: string
 ): Promise<boolean> => {
-  const isOwner = await DataSource.costByMonth.findFirst({
+  const isOwner = await DataSource.driver.findFirst({
     where: {
       AND: {
-        AND: {
-          costByYear: {
-            vehicle: {
-              vehicleDriver: {
-                every: {
-                  driver: {
-                    OR: {
-                      accountId,
-                      id: accountId
-                    }
-                  }
-                }
-              }
+        OR: {
+          accountId,
+          vehicleDriver: {
+            every: {
+              driverId: accountId
             }
-          },
-          id: costByMonthId
+          }
+        },
+        vehicleDriver: {
+          every: {
+            vehicleId
+          }
         }
       }
     }

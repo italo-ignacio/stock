@@ -1,12 +1,9 @@
-import { numberRequired, stringNotRequired, stringRequired } from '@main/utils';
+import { dateNotRequired, numberRequired, stringNotRequired, stringRequired } from '@main/utils';
 import { yup } from '@infra/yup';
 
 export const insertCostSchema = yup.object().shape({
   body: yup.object().shape({
-    costByMonthId: stringRequired({
-      english: 'id',
-      portuguese: 'id'
-    }),
+    date: dateNotRequired(),
     description: stringNotRequired(),
     driverId: stringNotRequired(),
     image: stringNotRequired(),
@@ -17,6 +14,10 @@ export const insertCostSchema = yup.object().shape({
     value: numberRequired({
       english: 'value',
       portuguese: 'valor'
+    }),
+    vehicleId: stringRequired({
+      english: 'id',
+      portuguese: 'id'
     })
   })
 });

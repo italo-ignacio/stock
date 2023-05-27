@@ -37,7 +37,6 @@ model VehicleFleet {
   name               String               @db.VarChar(100)
   vehicle            Vehicle[]
   vehicleFleetDriver VehicleFleetDriver[]
-  autoApproveCost    Boolean              @default(false)
   account            Account              @relation(fields: [accountId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   accountId          String
   createdAt          DateTime             @default(now())
@@ -77,19 +76,18 @@ model VehicleFleetDriver {
 }
 
 model Vehicle {
-  id              String          @id @default(uuid())
-  name            String          @db.VarChar(100)
-  licensePlate    String          @db.VarChar(100)
-  type            String          @db.VarChar(100)
-  image           String?
-  work            Work[]
-  cost            Cost[]
-  vehicleDriver   VehicleDriver[]
-  autoApproveCost Boolean         @default(false)
-  vehicleFleet    VehicleFleet    @relation(fields: [vehicleFleetId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  vehicleFleetId  String
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
+  id             String          @id @default(uuid())
+  name           String          @db.VarChar(100)
+  licensePlate   String          @db.VarChar(100)
+  type           String          @db.VarChar(100)
+  image          String?
+  work           Work[]
+  cost           Cost[]
+  vehicleDriver  VehicleDriver[]
+  vehicleFleet   VehicleFleet    @relation(fields: [vehicleFleetId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  vehicleFleetId String
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
 
   @@map("vehicle")
 }
@@ -116,6 +114,7 @@ model Work {
   status    STATUS   @default(PENDING)
   vehicle   Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   vehicleId String
+  date      DateTime @default(now())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -132,7 +131,7 @@ model Cost {
   driverId    String
   Vehicle     Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   vehicleId   String
-  status      STATUS   @default(PENDING)
+  date        DateTime @default(now())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -141,7 +140,7 @@ model Cost {
 
 enum STATUS {
   PENDING
-  APPROVED
+  FINISHED
 }
 
 enum PLAN {

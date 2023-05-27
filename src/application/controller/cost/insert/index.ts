@@ -2,19 +2,19 @@
 /* eslint-disable no-ternary */
 import { DataSource } from '@infra/database';
 import { ValidationError } from 'yup';
-import { accountCanCreateCost, costIsPending } from '@application/helpers';
+import { accountCanCreateCost } from '@application/helpers';
 import { badRequest, errorLogger, ok, unauthorized, validationErrorResponse } from '@main/utils';
 import { insertCostSchema } from '@data/validation';
 import type { Controller } from '@application/protocols';
 import type { Request, Response } from 'express';
 
 interface Body {
-  costByMonthId: string;
   name: string;
   value: number;
   description?: string;
   image?: string;
   driverId?: string;
+  date?: Date;
   vehicleId: string;
 }
 
@@ -23,21 +23,18 @@ export const insertCostController: Controller =
     try {
       await insertCostSchema.validate(request, { abortEarly: false });
 
-      const { costByMonthId, name, value, description, image, driverId, vehicleId } =
-        request.body as Body;
+      const { name, value, description, image, driverId, vehicleId, date } = request.body as Body;
 
-      if (!(await accountCanCreateCost(costByMonthId, request.account.id)))
+      if (!(await accountCanCreateCost(vehicleId, request.account.id)))
         return unauthorized({ response });
-
-      const status = (await costIsPending(costByMonthId)) ? 'PENDING' : 'APPROVED';
 
       await DataSource.cost.create({
         data: {
+          date,
           description,
           driverId: driverId ?? request.account.id,
           image,
           name,
-          status,
           value,
           vehicleId
         }

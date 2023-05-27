@@ -1,21 +1,17 @@
 import { DataSource } from '@infra/database';
 
-export const costIsPending = async (costByMonthId: string): Promise<boolean> => {
-  const notPending = await DataSource.costByMonth.findFirst({
+export const costIsPending = async (vehicleId: string): Promise<boolean> => {
+  const notPending = await DataSource.vehicle.findFirst({
     where: {
       AND: {
         AND: {
           OR: {
-            costByYear: {
-              vehicle: {
-                autoApproveCost: true,
-                vehicleFleet: {
-                  autoApproveCost: true
-                }
-              }
+            autoApproveCost: true,
+            vehicleFleet: {
+              autoApproveCost: true
             }
           },
-          id: costByMonthId
+          id: vehicleId
         }
       }
     }

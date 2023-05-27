@@ -12,7 +12,7 @@ interface Body {
   description?: string;
   image?: string;
   driverId?: string;
-  status?: 'APPROVED' | 'PENDING';
+  status?: 'FINISHED' | 'PENDING';
 }
 
 export const updateCostController: Controller =

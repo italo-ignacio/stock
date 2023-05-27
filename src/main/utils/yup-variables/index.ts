@@ -57,14 +57,11 @@ export const numberNotRequired = (): NumberSchema<Maybe<number | undefined>> =>
 export const dateRequired = (field: messageTypeResponse): DateSchema =>
   yup
     .date()
-    .typeError(JSON.stringify(messages.yup.dateSchema(field)))
+    .typeError(JSON.stringify(messages.yup.dateSchema))
     .required(JSON.stringify(messages.yup.requiredSchema(field)));
 
-export const dateNotRequired = (field: messageTypeResponse): DateSchema<Maybe<Date | undefined>> =>
-  yup
-    .date()
-    .typeError(JSON.stringify(messages.yup.dateSchema(field)))
-    .notRequired();
+export const dateNotRequired = (): DateSchema<Maybe<Date | undefined>> =>
+  yup.date().typeError(JSON.stringify(messages.yup.dateSchema)).notRequired();
 
 export const arrayRequired = (data: AnySchema, field: messageTypeResponse): AnySchema =>
   yup
