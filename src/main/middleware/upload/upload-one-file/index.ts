@@ -12,7 +12,7 @@ const storage = diskStorage({
   },
   filename(req, file, cb) {
     const extension = path.extname(file.originalname);
-    const allowedExtensions = ['.jpeg', '.png', '.webp', '.avif'];
+    const allowedExtensions = ['.jpeg', '.png', '.webp', '.avif', '.jpg'];
 
     if (allowedExtensions.includes(extension)) cb(null, `${Date.now()}-${file.originalname}`);
     else cb(new Error(''), '');
