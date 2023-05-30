@@ -3,7 +3,8 @@ import {
   deleteCostController,
   findCostController,
   findOneCostController,
-  insertCostController
+  insertCostController,
+  updateCostController
 } from '@application/controller/cost';
 
 export default (inputRouter: Router): void => {
@@ -12,7 +13,7 @@ export default (inputRouter: Router): void => {
   router.post('', insertCostController());
   router.get('', findCostController());
   router.get('/:id', findOneCostController());
-  // router.put('/:id', updateWorkController());
+  router.put('/:id', updateCostController());
   router.delete('/:id', deleteCostController());
 
   inputRouter.use('/cost', router);

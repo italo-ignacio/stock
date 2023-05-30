@@ -12,7 +12,6 @@ interface Body {
   description?: string;
   image?: string;
   driverId?: string;
-  status?: 'FINISHED' | 'PENDING';
 }
 
 export const updateCostController: Controller =
@@ -20,7 +19,7 @@ export const updateCostController: Controller =
     try {
       await updateCostSchema.validate(request, { abortEarly: false });
       const { id } = request.params;
-      const { name, value, description, image, driverId, status } = request.body as Body;
+      const { name, value, description, image, driverId } = request.body as Body;
 
       if (!(await accountOwnerCost(id, request.account.id))) return unauthorized({ response });
 
@@ -30,7 +29,6 @@ export const updateCostController: Controller =
           driverId,
           image,
           name,
-          status,
           value
         },
         where: {
