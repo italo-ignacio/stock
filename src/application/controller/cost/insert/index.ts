@@ -35,7 +35,7 @@ export const insertCostController: Controller =
           driverId: driverId ?? request.account.id,
           image,
           name,
-          value,
+          value: Number(value),
           vehicleId
         }
       });

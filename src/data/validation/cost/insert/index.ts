@@ -1,4 +1,4 @@
-import { dateNotRequired, numberRequired, stringNotRequired, stringRequired } from '@main/utils';
+import { dateNotRequired, stringNotRequired, stringRequired } from '@main/utils';
 import { yup } from '@infra/yup';
 
 export const insertCostSchema = yup.object().shape({
@@ -11,7 +11,7 @@ export const insertCostSchema = yup.object().shape({
       english: 'name',
       portuguese: 'nome'
     }),
-    value: numberRequired({
+    value: stringRequired({
       english: 'value',
       portuguese: 'valor'
     }),
