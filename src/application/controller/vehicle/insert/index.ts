@@ -14,7 +14,6 @@ interface Body {
   type: string;
   vehicleFleetId: string;
   image?: string;
-  autoApproveCost?: boolean;
   driverList?: string[];
 }
 
@@ -22,9 +21,7 @@ export const insertVehicleController: Controller =
   () => async (request: Request, response: Response) => {
     try {
       await insertVehicleSchema.validate(request, { abortEarly: false });
-
-      const { name, image, type, vehicleFleetId, licensePlate, autoApproveCost, driverList } =
-        request.body as Body;
+      const { name, image, type, vehicleFleetId, licensePlate, driverList } = request.body as Body;
 
       if (!(await accountIsOwnerOfVehicleFleet(vehicleFleetId, request.account.id)))
         return unauthorized({ response });
@@ -43,7 +40,6 @@ export const insertVehicleController: Controller =
 
       await DataSource.vehicle.create({
         data: {
-          autoApproveCost,
           image,
           licensePlate,
           name,

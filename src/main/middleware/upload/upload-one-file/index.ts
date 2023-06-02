@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
-import { badRequest } from '@main/utils';
+import { badRequest, errorLogger } from '@main/utils';
 import { env } from '@main/config';
 import { messages } from '@domain/helpers';
 import multer, { MulterError, diskStorage } from 'multer';
 import path from 'path';
+import type { Controller } from '@application/protocols';
 import type { NextFunction, Request, Response } from 'express';
 
 const storage = diskStorage({
@@ -21,10 +22,35 @@ const storage = diskStorage({
 
 export const uploadOneFileMiddleware = multer({
   limits: {
-    fileSize: 2 * 1024 * 1024
+    fileSize: 5 * 1024 * 1024
   },
   storage
 }).single('image');
+
+export const insertImage: Controller =
+  // eslint-disable-next-line consistent-return
+  () => (request: Request, response: Response, next: NextFunction) => {
+    try {
+      // eslint-disable-next-line @typescript-eslint/init-declarations
+      let filename: string | undefined;
+
+      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+      if (request.file?.filename)
+        filename = `${request.protocol}://${request.get('host') ?? ''}/static/uploads/${
+          env.staticPaths.images
+        }/${request.file.filename}`;
+
+      // eslint-disable-next-line no-undefined, @typescript-eslint/no-unsafe-assignment
+      if (filename !== undefined)
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        Object.assign(request, { body: { ...request.body, image: filename } });
+
+      next();
+    } catch (error) {
+      errorLogger(error);
+      return badRequest({ response });
+    }
+  };
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/explicit-function-return-type, max-params, unused-imports/no-unused-vars
 export const handleMulterError = (
@@ -35,7 +61,11 @@ export const handleMulterError = (
   // eslint-disable-next-line consistent-return, max-params
 ) => {
   if (err instanceof MulterError)
-    return badRequest({ message: messages.default.uploadError, response });
+    return badRequest({
+      message: messages.default.uploadError(err.message),
+      response
+    });
   if (err instanceof Error) return badRequest({ message: messages.default.badFile, response });
+
   next();
 };

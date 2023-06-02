@@ -25,9 +25,16 @@ export const defaultMessages = {
     english: 'Unauthenticated user',
     portuguese: 'Usuário não autenticado'
   },
-  uploadError: {
-    english: 'Error during file upload',
-    portuguese: 'Erro durante o upload do arquivo'
+  uploadError(message: string): messageTypeResponse {
+    if (message === 'File too large')
+      return {
+        english: 'File too large',
+        portuguese: 'Arquivo muito pesado'
+      };
+    return {
+      english: 'Error during file upload',
+      portuguese: 'Erro durante o upload do arquivo'
+    };
   },
   validationErrorResponse: {
     english: 'Failed during form validation',

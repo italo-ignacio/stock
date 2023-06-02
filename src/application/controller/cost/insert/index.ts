@@ -5,17 +5,19 @@ import { ValidationError } from 'yup';
 import { accountCanCreateCost } from '@application/helpers';
 import { badRequest, errorLogger, ok, unauthorized, validationErrorResponse } from '@main/utils';
 import { insertCostSchema } from '@data/validation';
+import { messages } from '@domain/helpers';
 import type { Controller } from '@application/protocols';
 import type { Request, Response } from 'express';
 
 interface Body {
   name: string;
   value: number;
+  vehicleId: string;
+
+  date?: string;
   description?: string;
   image?: string;
   driverId?: string;
-  date?: Date;
-  vehicleId: string;
 }
 
 export const insertCostController: Controller =
@@ -23,14 +25,16 @@ export const insertCostController: Controller =
     try {
       await insertCostSchema.validate(request, { abortEarly: false });
 
-      const { name, value, description, image, driverId, vehicleId, date } = request.body as Body;
+      const { name, value, description, driverId, image, vehicleId, date } = request.body as Body;
 
+      if (driverId === 'undefined' && request.account.role === 'account')
+        return badRequest({ message: messages.cost.driverRequired, response });
       if (!(await accountCanCreateCost(vehicleId, request.account.id)))
         return unauthorized({ response });
 
       await DataSource.cost.create({
         data: {
-          date,
+          date: typeof date === 'string' ? new Date(date) : new Date(),
           description,
           driverId: driverId ?? request.account.id,
           image,

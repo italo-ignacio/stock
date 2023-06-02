@@ -1,15 +1,8 @@
-import {
-  arrayNotRequired,
-  booleanNotRequired,
-  stringNotRequired,
-  stringRequired
-} from '@main/utils';
+import { arrayNotRequired, stringNotRequired, stringRequired } from '@main/utils';
 import { yup } from '@infra/yup';
 
 export const insertVehicleSchema = yup.object().shape({
   body: yup.object().shape({
-    autoApproveCost: booleanNotRequired(),
-    autoApproveWork: booleanNotRequired(),
     driverList: arrayNotRequired(
       stringRequired({
         english: 'driver id',

@@ -1,1 +1,0 @@
-export { default as Jwt } from './jwt-token-adapter';
