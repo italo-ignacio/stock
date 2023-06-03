@@ -33,6 +33,7 @@ export const authenticateDriverController: Controller =
         select: {
           email: true,
           id: true,
+          name: true,
           password: true
         },
         where: {
@@ -60,6 +61,7 @@ export const authenticateDriverController: Controller =
       const { accessToken } = generateToken({
         email: driver.email,
         id: driver.id,
+        name: driver.name,
         role: 'driver'
       });
 
@@ -80,7 +82,19 @@ export const authenticateDriverController: Controller =
         }
       });
 
-      return ok({ payload: { accessToken, refreshToken }, response });
+      return ok({
+        payload: {
+          accessToken,
+          refreshToken,
+          user: {
+            email: driver.id,
+            id: driver.id,
+            name: driver.id,
+            role: 'driver'
+          }
+        },
+        response
+      });
     } catch (error) {
       errorLogger(error);
 

@@ -16,11 +16,11 @@ interface generateTokenOutput {
   accessToken: string;
 }
 
-export const generateToken = ({ id, email, role }: tokenInput): generateTokenOutput => {
+export const generateToken = ({ id, email, role, name }: tokenInput): generateTokenOutput => {
   const { jwtSecret, jwtExpiresIn } = env;
 
   const data = {
-    accessToken: sign({ email, id, role }, jwtSecret, { expiresIn: jwtExpiresIn })
+    accessToken: sign({ email, id, name, role }, jwtSecret, { expiresIn: jwtExpiresIn })
   };
 
   return data;

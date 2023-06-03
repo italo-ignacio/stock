@@ -26,6 +26,7 @@ export const authenticateAccountController: Controller =
         select: {
           email: true,
           id: true,
+          name: true,
           password: true
         },
         where: { email }
@@ -48,6 +49,7 @@ export const authenticateAccountController: Controller =
       const { accessToken } = generateToken({
         email: account.email,
         id: account.id,
+        name: account.name,
         role: 'account'
       });
 
@@ -68,7 +70,19 @@ export const authenticateAccountController: Controller =
         }
       });
 
-      return ok({ payload: { accessToken, refreshToken }, response });
+      return ok({
+        payload: {
+          accessToken,
+          refreshToken,
+          user: {
+            email: account.email,
+            id: account.id,
+            name: account.name,
+            role: 'account'
+          }
+        },
+        response
+      });
     } catch (error) {
       errorLogger(error);
 
