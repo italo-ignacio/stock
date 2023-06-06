@@ -14,5 +14,17 @@ export default (inputRouter: Router): void => {
 
   router.post('/refresh-token', refreshTokenController());
 
+  router.post('/account/recover-password', (req, res) => {
+    res.json({
+      message: 'route in progress'
+    });
+  });
+
+  router.post('/driver/recover-password', (req, res) => {
+    res.json({
+      message: 'route in progress'
+    });
+  });
+
   inputRouter.use('/auth', router);
 };

@@ -1,14 +1,14 @@
 import { DataSource } from '@infra/database';
 
-export const accountIsOwnerOfVehicleFleet = async (
-  vehicleFleetId: string,
+export const accountIsOwnerOfFleet = async (
+  fleetId: string,
   accountId: string
 ): Promise<boolean> => {
-  const isOwner = await DataSource.vehicleFleet.findFirst({
+  const isOwner = await DataSource.fleet.findFirst({
     where: {
       AND: {
         accountId,
-        id: vehicleFleetId
+        id: fleetId
       }
     }
   });

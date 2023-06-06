@@ -19,7 +19,7 @@ export const findVehicleController: Controller =
             }
           }
         : {
-            vehicleFleet: {
+            fleet: {
               accountId: request.account.id
             }
           };
@@ -27,10 +27,14 @@ export const findVehicleController: Controller =
     try {
       const search = await DataSource.vehicle.findMany({
         select: {
+          cost: true,
+          fleet: true,
           id: true,
           image: true,
+          licensePlate: true,
           name: true,
-          type: true
+          type: true,
+          work: true
         },
         skip,
         take,

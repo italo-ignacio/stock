@@ -19,7 +19,7 @@ export const findOneVehicleController: Controller =
             }
           }
         : {
-            vehicleFleet: {
+            fleet: {
               accountId: request.account.id
             }
           };

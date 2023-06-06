@@ -6,13 +6,13 @@ export const accountCanCreateWork = async (vehicleId: string, id: string): Promi
       AND: {
         AND: {
           OR: {
+            fleet: {
+              accountId: id
+            },
             vehicleDriver: {
               every: {
                 driverId: id
               }
-            },
-            vehicleFleet: {
-              accountId: id
             }
           },
           id: vehicleId
@@ -34,7 +34,7 @@ export const accountCanUpdateWork = async (id: string, accountId: string): Promi
           OR: {
             driverId: accountId,
             vehicle: {
-              vehicleFleet: {
+              fleet: {
                 accountId
               }
             }

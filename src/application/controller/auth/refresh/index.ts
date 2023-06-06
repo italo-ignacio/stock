@@ -28,42 +28,51 @@ export const refreshTokenController: Controller =
       const account = await DataSource.account.findFirst({
         select: {
           email: true,
-          id: true
+          id: true,
+          name: true,
+          refreshTokenExpiresAt: true
         },
         where: {
           refreshToken
         }
       });
 
-      if (account !== null) {
-        const { accessToken } = generateToken({
-          email: account.email,
-          id: account.id,
-          role: 'account'
-        });
+      if (account !== null)
+        if (account.refreshTokenExpiresAt !== null && account.refreshTokenExpiresAt <= new Date()) {
+          const { accessToken } = generateToken({
+            email: account.email,
+            id: account.id,
+            name: account.name,
+            role: 'account'
+          });
 
-        return ok({ payload: { accessToken }, response });
-      }
+          return ok({ payload: { accessToken }, response });
+        }
 
       const driver = await DataSource.driver.findFirst({
         select: {
           email: true,
-          id: true
+          id: true,
+          name: true,
+
+          refreshTokenExpiresAt: true
         },
         where: {
           refreshToken
         }
       });
 
-      if (driver !== null) {
-        const { accessToken } = generateToken({
-          email: driver.email,
-          id: driver.id,
-          role: 'driver'
-        });
+      if (driver !== null)
+        if (driver.refreshTokenExpiresAt !== null && driver.refreshTokenExpiresAt <= new Date()) {
+          const { accessToken } = generateToken({
+            email: driver.email,
+            id: driver.id,
+            name: driver.name,
+            role: 'driver'
+          });
 
-        return ok({ payload: { accessToken }, response });
-      }
+          return ok({ payload: { accessToken }, response });
+        }
 
       return unauthorized({
         message: messages.auth.notFound,

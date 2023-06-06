@@ -9,7 +9,7 @@ export const accountCanCreateCostByYear = async (
       AND: {
         AND: {
           OR: {
-            vehicleFleet: {
+            fleet: {
               accountId: id
             }
           },
@@ -34,7 +34,7 @@ export const accountCanDeleteCostByYear = async (
         AND: {
           OR: {
             vehicle: {
-              vehicleFleet: {
+              fleet: {
                 accountId
               }
             }

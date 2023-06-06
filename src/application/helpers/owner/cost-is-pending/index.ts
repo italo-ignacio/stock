@@ -7,7 +7,7 @@ export const costIsPending = async (vehicleId: string): Promise<boolean> => {
         AND: {
           OR: {
             autoApproveCost: true,
-            vehicleFleet: {
+            fleet: {
               autoApproveCost: true
             }
           },

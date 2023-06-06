@@ -11,7 +11,7 @@ interface Body {
   name: string;
   email?: string;
   driverId?: string;
-  vehicleFleetList?: string[];
+  fleetList?: string[];
 }
 
 export const updateDriverController: Controller =

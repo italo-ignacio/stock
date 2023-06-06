@@ -4,10 +4,10 @@ export const accountIsOwnerOfVehicle = async (id: string, accountId: string): Pr
   const isOwner = await DataSource.vehicle.findFirst({
     where: {
       AND: {
-        id,
-        vehicleFleet: {
+        fleet: {
           accountId
-        }
+        },
+        id
       }
     }
   });

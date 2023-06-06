@@ -12,7 +12,7 @@ import type { Request, Response } from 'express';
 interface Body {
   name: string;
   email: string;
-  vehicleFleetList?: string[];
+  fleetList?: string[];
 }
 
 export const insertDriverController: Controller =
@@ -20,7 +20,7 @@ export const insertDriverController: Controller =
     try {
       await insertDriverSchema.validate(request, { abortEarly: false });
 
-      const { name, email, vehicleFleetList } = request.body as Body;
+      const { name, email, fleetList } = request.body as Body;
 
       const hasDriver = await DataSource.driver.findFirst({
         select: {
@@ -37,12 +37,12 @@ export const insertDriverController: Controller =
       if (hasDriver !== null)
         return badRequest({ message: messages.account.emailAlreadyExists, response });
 
-      const vehicleFleetDriver = arrayExists(vehicleFleetList)
+      const fleetDriver = arrayExists(fleetList)
         ? {
             createMany: {
               data:
-                vehicleFleetList?.map((driver) => ({
-                  vehicleFleetId: driver
+                fleetList?.map((driver) => ({
+                  fleetId: driver
                 })) ?? [],
               skipDuplicates: true
             }
@@ -53,9 +53,9 @@ export const insertDriverController: Controller =
         data: {
           accountId: request.account.id,
           email,
+          fleetDriver,
           name,
-          password: 'password',
-          vehicleFleetDriver
+          password: 'password'
         },
         select: {
           id: true

@@ -2,8 +2,8 @@
 /* eslint-disable no-ternary */
 import { DataSource } from '@infra/database';
 import { ValidationError } from 'yup';
-import { accountCanCreateCost } from '@application/helpers';
-import { badRequest, errorLogger, ok, unauthorized, validationErrorResponse } from '@main/utils';
+import { accountCanCreateCost, driverCanCreateCost } from '@application/helpers';
+import { badRequest, errorLogger, ok, validationErrorResponse } from '@main/utils';
 import { insertCostSchema } from '@data/validation';
 import { messages } from '@domain/helpers';
 import type { Controller } from '@application/protocols';
@@ -29,8 +29,24 @@ export const insertCostController: Controller =
 
       if (driverId === 'undefined' && request.account.role === 'account')
         return badRequest({ message: messages.cost.driverRequired, response });
-      if (!(await accountCanCreateCost(vehicleId, request.account.id)))
-        return unauthorized({ response });
+
+      if (request.account.role === 'account') {
+        if (!(await accountCanCreateCost(vehicleId, request.account.id)))
+          return badRequest({
+            message: messages.auth.notPermission({
+              english: 'create a cost',
+              portuguese: 'criar um custo'
+            }),
+            response
+          });
+      } else if (!(await driverCanCreateCost(vehicleId, request.account.id)))
+        return badRequest({
+          message: messages.auth.notPermission({
+            english: 'create a cost',
+            portuguese: 'criar um custo'
+          }),
+          response
+        });
 
       await DataSource.cost.create({
         data: {

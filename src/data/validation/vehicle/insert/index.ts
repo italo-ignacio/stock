@@ -1,14 +1,13 @@
-import { arrayNotRequired, stringNotRequired, stringRequired } from '@main/utils';
+import { stringNotRequired, stringRequired } from '@main/utils';
 import { yup } from '@infra/yup';
 
 export const insertVehicleSchema = yup.object().shape({
   body: yup.object().shape({
-    driverList: arrayNotRequired(
-      stringRequired({
-        english: 'driver id',
-        portuguese: 'id do motorista'
-      })
-    ),
+    driverList: stringNotRequired(),
+    fleetId: stringRequired({
+      english: 'vehicle fleet',
+      portuguese: 'frota de veíuclo'
+    }),
     image: stringNotRequired(),
     licensePlate: stringRequired({
       english: 'license plate',
@@ -21,10 +20,6 @@ export const insertVehicleSchema = yup.object().shape({
     type: stringRequired({
       english: 'type',
       portuguese: 'tipo'
-    }),
-    vehicleFleetId: stringRequired({
-      english: 'vehicle fleet',
-      portuguese: 'frota de veíuclo'
     })
   })
 });

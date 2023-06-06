@@ -7,15 +7,15 @@ export const insertDriverSchema = yup.object().shape({
       english: 'email',
       portuguese: 'e-mail'
     }),
-    name: stringRequired({
-      english: 'name',
-      portuguese: 'nome'
-    }),
-    vehicleFleetList: arrayNotRequired(
+    fleetList: arrayNotRequired(
       stringRequired({
         english: 'id',
         portuguese: 'id'
       })
-    )
+    ),
+    name: stringRequired({
+      english: 'name',
+      portuguese: 'nome'
+    })
   })
 });

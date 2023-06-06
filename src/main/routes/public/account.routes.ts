@@ -6,11 +6,5 @@ export default (inputRouter: Router): void => {
 
   router.post('', insertAccountController());
 
-  router.post('/recover-password', (req, res) => {
-    res.json({
-      message: 'route in progress'
-    });
-  });
-
   inputRouter.use('/account', router);
 };

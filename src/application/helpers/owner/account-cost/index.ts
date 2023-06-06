@@ -4,17 +4,30 @@ export const accountCanCreateCost = async (
   vehicleId: string,
   accountId: string
 ): Promise<boolean> => {
+  const isOwner = await DataSource.vehicle.findFirst({
+    where: {
+      AND: {
+        fleet: {
+          accountId
+        },
+        id: vehicleId
+      }
+    }
+  });
+
+  if (isOwner !== null) return true;
+
+  return false;
+};
+
+export const driverCanCreateCost = async (
+  vehicleId: string,
+  driverId: string
+): Promise<boolean> => {
   const isOwner = await DataSource.driver.findFirst({
     where: {
       AND: {
-        OR: {
-          accountId,
-          vehicleDriver: {
-            every: {
-              driverId: accountId
-            }
-          }
-        },
+        id: driverId,
         vehicleDriver: {
           every: {
             vehicleId

@@ -2,7 +2,7 @@
 /* eslint-disable no-ternary */
 import { DataSource } from '@infra/database';
 import { ValidationError } from 'yup';
-import { accountIsOwnerOfVehicleFleet, arrayExists } from '@application/helpers';
+import { accountIsOwnerOfFleet } from '@application/helpers';
 import { badRequest, errorLogger, ok, unauthorized, validationErrorResponse } from '@main/utils';
 import { insertVehicleSchema } from '@data/validation';
 import type { Controller } from '@application/protocols';
@@ -12,40 +12,42 @@ interface Body {
   name: string;
   licensePlate: string;
   type: string;
-  vehicleFleetId: string;
+  fleetId: string;
   image?: string;
-  driverList?: string[];
+  driverList?: string;
 }
 
 export const insertVehicleController: Controller =
   () => async (request: Request, response: Response) => {
     try {
       await insertVehicleSchema.validate(request, { abortEarly: false });
-      const { name, image, type, vehicleFleetId, licensePlate, driverList } = request.body as Body;
+      const { name, image, type, fleetId, licensePlate, driverList } = request.body as Body;
 
-      if (!(await accountIsOwnerOfVehicleFleet(vehicleFleetId, request.account.id)))
+      if (!(await accountIsOwnerOfFleet(fleetId, request.account.id)))
         return unauthorized({ response });
 
-      const vehicleDriver = arrayExists(driverList)
-        ? {
-            createMany: {
-              data:
-                driverList?.map((driver) => ({
+      const driverArray = typeof driverList === 'string' ? driverList.split(',') : null;
+
+      const vehicleDriver =
+        driverArray === null
+          ? undefined
+          : {
+              createMany: {
+                data: driverArray.map((driver) => ({
                   driverId: driver
-                })) ?? [],
-              skipDuplicates: true
-            }
-          }
-        : undefined;
+                })),
+                skipDuplicates: true
+              }
+            };
 
       await DataSource.vehicle.create({
         data: {
+          fleetId,
           image,
           licensePlate,
           name,
           type,
-          vehicleDriver,
-          vehicleFleetId
+          vehicleDriver
         },
         select: {
           id: true
