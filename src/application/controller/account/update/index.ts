@@ -9,7 +9,7 @@ import type { Request, Response } from 'express';
 interface Body {
   name?: string;
   email?: string;
-  startLocations?: [];
+  startLocations?: string;
 }
 
 export const updateAccountController: Controller =

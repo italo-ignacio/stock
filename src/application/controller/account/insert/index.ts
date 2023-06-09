@@ -38,7 +38,7 @@ export const insertAccountController: Controller =
       const hashedPassword = await hash(password, hashSalt);
 
       await DataSource.account.create({
-        data: { email, name, password: hashedPassword, startLocations: [] },
+        data: { email, name, password: hashedPassword, startLocations: '' },
         select: {
           id: true
         }

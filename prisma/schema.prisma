@@ -22,7 +22,7 @@ model Account {
   fleet                 Fleet[]
   driver                Driver[]
   client                client[]
-  startLocations        String?
+  startLocations        String
   maxDriver             Int       @default(7)
   maxFleet              Int       @default(1)
   maxVehicle            Int       @default(7)

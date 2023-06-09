@@ -1,3 +1,5 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 /* eslint-disable no-undefined */
 /* eslint-disable no-ternary */
 import { DataSource } from '@infra/database';
@@ -37,17 +39,23 @@ export const insertDriverController: Controller =
       if (hasDriver !== null)
         return badRequest({ message: messages.account.emailAlreadyExists, response });
 
-      const fleetDriver = arrayExists(fleetList)
-        ? {
-            createMany: {
-              data:
-                fleetList?.map((driver) => ({
-                  fleetId: driver
-                })) ?? [],
-              skipDuplicates: true
-            }
-          }
-        : undefined;
+      const fleetDriver =
+        arrayExists(fleetList) && fleetList !== undefined
+          ? fleetList.length > 1
+            ? {
+                createMany: {
+                  data: fleetList.map((driver) => ({
+                    fleetId: driver
+                  })),
+                  skipDuplicates: true
+                }
+              }
+            : {
+                create: {
+                  fleetId: fleetList[0]
+                }
+              }
+          : undefined;
 
       await DataSource.driver.create({
         data: {
