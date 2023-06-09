@@ -9,6 +9,7 @@ import type { Request, Response } from 'express';
 interface Body {
   name?: string;
   email?: string;
+  startLocations?: [];
 }
 
 export const updateAccountController: Controller =
@@ -16,7 +17,7 @@ export const updateAccountController: Controller =
     try {
       await updateAccountSchema.validate(request, { abortEarly: false });
 
-      const { name, email } = request.body as Body;
+      const { name, email, startLocations } = request.body as Body;
 
       if (typeof email !== 'undefined') {
         const hasAccount = await DataSource.account.findUnique({
@@ -33,7 +34,7 @@ export const updateAccountController: Controller =
       }
 
       await DataSource.account.update({
-        data: { email, name },
+        data: { email, name, startLocations },
         select: {
           id: true
         },

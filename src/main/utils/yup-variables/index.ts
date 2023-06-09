@@ -70,3 +70,10 @@ export const arrayRequired = (data: AnySchema, field: messageTypeResponse): AnyS
     .required(JSON.stringify(messages.yup.requiredSchema(field)));
 
 export const arrayNotRequired = (data: AnySchema): AnySchema => yup.array().of(data);
+
+export const locationSchema = (): AnySchema =>
+  yup.object().shape({
+    description: yup.string().required(),
+    lat: yup.number().required(),
+    lng: yup.number().required()
+  });

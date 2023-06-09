@@ -78,5 +78,6 @@
   },
   "terminal.integrated.defaultProfile.windows": "Git Bash",
   "typescript.updateImportsOnFileMove.enabled": "always",
-  "workbench.iconTheme": "material-icon-theme"
+  "workbench.iconTheme": "material-icon-theme",
+  "cSpell.words": ["cnpj"]
 }

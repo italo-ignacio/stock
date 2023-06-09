@@ -3,15 +3,11 @@ import { badRequest, errorLogger, ok } from '@main/utils';
 import type { Controller } from '@application/protocols';
 import type { Request, Response } from 'express';
 
-export const findAccountController: Controller =
+export const findStartLocationsController: Controller =
   () => async (request: Request, response: Response) => {
     try {
       const search = await DataSource.account.findUnique({
         select: {
-          email: true,
-          id: true,
-          name: true,
-          plan: true,
           startLocations: true
         },
         where: {

@@ -8,3 +8,4 @@ export * from './work';
 export * from './cost-by-year';
 export * from './cost';
 export * from './find-one';
+export * from './client';

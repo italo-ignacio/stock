@@ -1,14 +1,14 @@
 import { DataSource } from '@infra/database';
 
-export const accountIsOwnerOfClient = async (
-  clientId: string,
+export const accountIsOwnerOfDriver = async (
+  driverId: string,
   accountId: string
 ): Promise<boolean> => {
-  const isOwner = await DataSource.client.findFirst({
+  const isOwner = await DataSource.driver.findFirst({
     where: {
       AND: {
         accountId,
-        id: clientId
+        id: driverId
       }
     }
   });
