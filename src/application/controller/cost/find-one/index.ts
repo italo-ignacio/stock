@@ -31,7 +31,6 @@ export const findOneCostController: Controller =
           id: true,
           image: true,
           name: true,
-          status: true,
           value: true
         },
         where: {

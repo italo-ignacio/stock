@@ -1,3 +1,5 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-negated-condition */
 /* eslint-disable no-undefined */
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 /* eslint-disable no-ternary */
@@ -24,8 +26,7 @@ export const updateVehicleController: Controller =
     try {
       await updateVehicleSchema.validate(request, { abortEarly: false });
 
-      const { name, image, type, licensePlate, autoApproveCost, autoApproveWork, driverList } =
-        request.body as Body;
+      const { name, image, type, licensePlate, driverList } = request.body as Body;
 
       const { id } = request.params;
 
@@ -38,20 +39,26 @@ export const updateVehicleController: Controller =
         return unauthorized({ response });
 
       const vehicleDriver =
-        driverList !== undefined && driverList.length >= 1
-          ? {
-              createMany: {
-                data: driverList.map((driver) => ({
-                  driverId: driver
-                })),
-                skipDuplicates: true
+        driverList !== undefined
+          ? driverList.length > 1
+            ? {
+                createMany: {
+                  data: driverList.map((driver) => ({
+                    driverId: driver
+                  })),
+                  skipDuplicates: true
+                }
               }
-            }
+            : {
+                create: {
+                  driverId: driverList[0]
+                }
+              }
           : undefined;
 
       const data = isDriver
         ? { image, licensePlate, name, type }
-        : { autoApproveCost, autoApproveWork, image, licensePlate, name, type, vehicleDriver };
+        : { image, licensePlate, name, type, vehicleDriver };
 
       // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
       if (image) {

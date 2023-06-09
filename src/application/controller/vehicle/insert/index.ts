@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-magic-numbers */
+/* eslint-disable no-nested-ternary */
 /* eslint-disable no-undefined */
 /* eslint-disable no-ternary */
 import { DataSource } from '@infra/database';
@@ -31,12 +33,18 @@ export const insertVehicleController: Controller =
       const vehicleDriver =
         driverArray === null
           ? undefined
-          : {
+          : driverArray.length > 1
+          ? {
               createMany: {
                 data: driverArray.map((driver) => ({
                   driverId: driver
                 })),
                 skipDuplicates: true
+              }
+            }
+          : {
+              create: {
+                driverId: driverArray[0]
               }
             };
 

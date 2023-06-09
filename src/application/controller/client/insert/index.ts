@@ -10,7 +10,7 @@ import type { Request, Response } from 'express';
 interface Body {
   name: string;
   cnpj: string;
-  locations: string[];
+  locations: string;
 }
 
 export const insertClientController: Controller =

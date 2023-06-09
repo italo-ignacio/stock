@@ -15,6 +15,7 @@ interface Body {
   match: string;
   vehicleId: string;
   driverId?: string;
+  clientId: string;
 }
 
 export const insertWorkController: Controller =
@@ -22,13 +23,15 @@ export const insertWorkController: Controller =
     try {
       await insertWorkSchema.validate(request, { abortEarly: false });
 
-      const { destiny, distance, match, vehicleId, driverId, profit } = request.body as Body;
+      const { destiny, distance, match, vehicleId, driverId, profit, clientId } =
+        request.body as Body;
 
       if (!(await accountCanCreateWork(vehicleId, request.account.id)))
         return unauthorized({ response });
 
       await DataSource.work.create({
         data: {
+          clientId,
           destiny,
           distance,
           driverId: driverId ?? request.account.id,
