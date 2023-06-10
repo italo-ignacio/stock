@@ -14,7 +14,7 @@ DataSource.$connect()
       });
     } else console.info('Environment variables missing');
   })
-  .catch((error) => {
+  .catch((error: unknown) => {
     if (error instanceof Error)
       console.error(`An error of type ${error.name} occurred. See the logs error...`);
 
