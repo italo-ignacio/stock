@@ -6,7 +6,7 @@
     "build": "tsc",
     "dev": "ts-node-dev --respawn --transpile-only --clear -r dotenv/config --inspect=0.0.0.0:9229 src/main/server.ts --host",
     "install:clean:windows": "rmdir node_modules & del package-lock.json & del yarn.lock & yarn install",
-    "start": "node build/main/server.js"
+    "cache": "node build/main/server.js"
   },
   "dependencies": {
     "@types/bcrypt": "^5.0.0",
